@@ -11,6 +11,7 @@ class HubServer {
   }
 
   start = () => {
+
     this.hub.on('connection', socket => {
       console.log('Connected: ', socket.id);
     
@@ -18,7 +19,16 @@ class HubServer {
         this.createMessageQueue(payload)
         socket.join(payload.clientID)
       })
+
+      socket.on('NEW-PET-REQUEST', request => {
+        console.log('--- NEW REQUEST ---', request);
+        console.log('customer: ', request.payload.customer)
+        console.log('location: ', request.payload.location)
+        console.log('reqId: ', request.payload.reqId)
+      })
+
     })
+
   }
   
   createMessageQueue = (payload) => {

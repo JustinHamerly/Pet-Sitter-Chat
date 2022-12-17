@@ -3,9 +3,9 @@
 const Chance = require('chance');
 const chance = new Chance();
 
-const petServiceQueue = require('./lib/pet-service-queue');
+const Queue = require('./lib/Queue');
 const companyName = chance.company();
-const sitterQueue = new petServiceQueue(companyName);
+const sitterQueue = new Queue(companyName);
 
 sitterQueue.subscribe('NEW-PET-REQUEST', payload => {})
 sitterQueue.subscribe('OWNER-MESSAGE', payload => {})

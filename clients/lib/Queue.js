@@ -4,7 +4,7 @@ require('dotenv').config();
 const hubClient = require('socket.io-client');
 const SERVER = process.env.SERVER;
 
-class petServiceQueue {
+class Queue {
   constructor(id){
     this.id = id;
     this.socket = hubClient.connect(SERVER);
@@ -16,6 +16,7 @@ class petServiceQueue {
 
   subscribe(eventType, callback){
     this.socket.emit('subscribe', { clientID: this.id, event: eventType });
+
     this.socket.on(eventType, data => {
       let {messageID, payload} = data;
       this.socket.emit(
@@ -24,8 +25,10 @@ class petServiceQueue {
       );
       callback(payload)
     })
+
+    
   }
 
 }
 
-module.exports = petServiceQueue;
+module.exports = Queue;
