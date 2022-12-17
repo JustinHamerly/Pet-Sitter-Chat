@@ -10,7 +10,7 @@ class petServiceQueue {
     this.socket = hubClient.connect(SERVER);
   }
 
-  triggerEvent(eventType, payload){
+  trigger(eventType, payload){
     this.socket.emit(eventType, {clientID: this.id, payload})
   }
 
