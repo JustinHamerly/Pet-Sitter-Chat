@@ -6,6 +6,8 @@ const chance = new Chance();
 const Queue = require('./lib/Queue');
 const ownerQueue = new Queue('owners');
 
+ownerQueue.subscribe('REQUEST-ACCEPTED', sendConfirmation)
+
 const createPetRequest = () => {
   const mockRequest = {
     customer: chance.name(),
@@ -15,3 +17,9 @@ const createPetRequest = () => {
 }
 
 setInterval(createPetRequest, 5000);
+
+function sendConfirmation(payload){
+  console.log('Owner Notified... ')
+  console.log(payload)
+  
+}

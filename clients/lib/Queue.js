@@ -15,10 +15,15 @@ class Queue {
   }
 
   subscribe(eventType, callback){
-    this.socket.emit('subscribe', { clientID: this.id, event: eventType });
+
+    this.socket.emit(
+      'SUBSCRIBE', 
+      { clientID: this.id, event: eventType }
+    );
 
     this.socket.on(eventType, data => {
       let {messageID, payload} = data;
+      console.log('data ----->', data)
       this.socket.emit(
         'RECEIVED', 
         { messageID, event: eventType, clientID: this.id }
