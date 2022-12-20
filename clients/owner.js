@@ -4,16 +4,14 @@ const Chance = require('chance');
 const chance = new Chance();
 
 const Queue = require('./lib/Queue');
-const ownerName = chance.name();
-const ownerQueue = new Queue(ownerName);
+const ownerQueue = new Queue('owners');
 
 const createPetRequest = () => {
   const mockRequest = {
-    customer: ownerName,
-    location: `${chance.city()}, ${chance.state()}`,
+    customer: chance.name(),
     reqId: chance.guid()
   }
   ownerQueue.trigger('NEW-PET-REQUEST', mockRequest);
 }
 
-setInterval(createPetRequest, 2500);
+setInterval(createPetRequest, 5000);
