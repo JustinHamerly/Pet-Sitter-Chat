@@ -23,7 +23,6 @@ class Queue {
 
     this.socket.on(eventType, data => {
       let {messageID, payload} = data;
-      console.log('data ----->', data)
       this.socket.emit(
         'RECEIVED', 
         { messageID, event: eventType, clientID: this.id }

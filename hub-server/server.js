@@ -26,27 +26,59 @@ class HubServer {
 
       // when a message is received by a client, the message will be removed from the queue.
       socket.on('RECEIVED', payload => {
-        console.log('----- MESSAGE RECEIVED AND REMOVED FROM QUEUE -----')
+        console.log('----- MESSAGE RECEIVED REMOVED -----')
         let {messageID, event, clientID} = payload;
-        console.log(payload)
         delete this.messageQueue[event][clientID][messageID];
       })
 
       socket.on('NEW-PET-REQUEST', request => {
         console.log('----- NEW PET REQUEST -----');
-
+        console.log(request)
         let messageID = uuid();
         this.messageQueue['NEW-PET-REQUEST']['sitter'][messageID] = request.payload;
         request.messageID = messageID;
-        console.log(this.messageQueue['NEW-PET-REQUEST']['sitter'])
+
         this.hub.in('sitter').emit('NEW-PET-REQUEST', request)
       })
 
       socket.on('REQUEST-ACCEPTED', request => {
         console.log('----- REQUEST ACCEPTED BY OWNER -----');
+
         let messageID = uuid();
         this.messageQueue['REQUEST-ACCEPTED']['owner'][messageID] = request.payload;
+        request.messageID = messageID;
+
         this.hub.in('owner').emit('REQUEST-ACCEPTED', request)
+      })
+
+      socket.on('OWNER-MESSAGE', request => {
+        console.log('----- OWNER SENT MESSAGE -----');
+
+        let messageID = uuid();
+        this.messageQueue['OWNER-MESSAGE']['sitter'][messageID] = request.payload;
+        request.messageID = messageID;
+
+        this.hub.in('sitter').emit('OWNER-MESSAGE', request)
+      })
+
+      socket.on('PAYMENT-REQUEST', request => {
+        console.log('----- PAYMENT REQUEST -----')
+
+        let messageID = uuid();
+        this.messageQueue['PAYMENT-REQUEST']['owner'][messageID] = request.payload;
+        request.messageID = messageID;
+
+        this.hub.in('owner').emit('PAYMENT-REQUEST', request)
+      })
+
+      socket.on('SEND-PAYMENT', request => {
+        console.log('----- OWNER SENT PAYMENT -----');
+
+        let messageID = uuid();
+        this.messageQueue['SEND-PAYMENT']['sitter'][messageID] = request.payload;
+        request.messageID = messageID;
+
+        this.hub.in('sitter').emit('SEND-PAYMENT', request)
       })
 
     })
